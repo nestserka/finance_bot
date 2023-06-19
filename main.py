@@ -1,5 +1,6 @@
 import datetime
 import telebot
+import os
 from telebot import TeleBot, types
 import logging 
 import category
@@ -10,7 +11,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-bot = telebot.TeleBot("5844191574:AAHunAoovc85hKgT6cvNpXyiEouSHxhexRQ")
+token = os.environ.get('BOT_AUTH_TOKEN')
+bot = telebot.TeleBot(token)
 
 
 @bot.message_handler(commands=['start'])
