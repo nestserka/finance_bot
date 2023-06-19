@@ -6,13 +6,18 @@ import logging
 import category
 from datetime import date, timedelta
 import sqlite3
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+BOT_API_TOKEN = os.getenv("BOT_API_TOKEN")
+bot = telebot.TeleBot(BOT_API_TOKEN)
 
-token = os.environ.get('BOT_AUTH_TOKEN')
-bot = telebot.TeleBot(token)
 
 
 @bot.message_handler(commands=['start'])
