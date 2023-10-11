@@ -18,6 +18,23 @@ logger = logging.getLogger(__name__)
 BOT_API_TOKEN = os.getenv("BOT_API_TOKEN")
 bot = telebot.TeleBot(BOT_API_TOKEN)
 
+data_handler_mapping = {
+    'register': handler_category,
+    'total': select_records_last_7_days,
+    'income': handler_income,
+    'saving': handler_saving,
+    'fixed_expenditure': handler_fixed_expenditure,
+    'food_expenses': handler_food_expenses,
+    'pocket_money': handler_pocket_money,
+    'clothing': handler_clothing,
+    'animals': handler_animals,
+    'self_emprov': handler_self_emprov,
+    'family_celebration': handler_family_celebration,
+    'traveling': handler_traveling,
+    'health': handler_health,
+    'daily_supply': handler_daily_supply
+}
+
 
 
 @bot.message_handler(commands=['start'])
@@ -33,46 +50,10 @@ def handle_start(message):
 def callback_inline(call):
     try:
         if call.message:
-            if call.data == 'register':
-                handler_category(call.message)
-            elif call.data == 'total':
-                select_records_last_7_days(call.message)
-            elif call.data == 'income':
-                save_user_choice(call.message, '수입')
-                handler_income(call.message)
-            elif call.data == 'saving':
-                save_user_choice(call.message, '저축')
-                handler_saving(call.message)
-            elif call.data == 'fixed_expenditure':
-                save_user_choice(call.message, '고정지출')
-                handler_fixed_expenditure(call.message)
-            elif call.data == 'food_expenses':
-                save_user_choice(call.message, '식비')
-                handler_food_expenses(call.message)
-            elif call.data == 'pocket_money':
-                save_user_choice(call.message, '용돈')
-                handler_pocket_money(call.message)
-            elif call.data == 'clothing':
-                save_user_choice(call.message, '의복/미용')
-                handler_clothing(call.message)
-            elif call.data == 'animals':
-                save_user_choice(call.message, '동물')
-                handler_animals(call.message)
-            elif call.data == 'self_emprov':
-                save_user_choice(call.message, '자기계발')
-                handler_self_emprov(call.message)
-            elif call.data == 'family_celebration':
-                save_user_choice(call.message, '경조사')
-                handler_family_celebration(call.message)
-            elif call.data == 'traveling':
-                save_user_choice(call.message, '여행')
-                handler_traveling(call.message)
-            elif call.data == 'health':
-                save_user_choice(call.message, '간강')
-                handler_health(call.message)
-            elif call.data == 'daily_supply':
-                save_user_choice(call.message, '생활용품')
-                handler_daily_supply(call.message)
+            handler_function = data_handler_mapping.get(call.data)
+            if handler_function:
+                save_user_choice(call.message, call.data)
+                handler_function(call.message)
     except Exception as e:
         logger.error(repr(e))
 
